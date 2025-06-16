@@ -1,0 +1,553 @@
+<!--<script>-->
+<!--    window.addEventListener('pageshow', function (event) {-->
+<!--        if (event.persisted || (window.performance && performance.getEntriesByType("navigation")[0].type === "back_forward")) {-->
+<!--            window.location.reload();-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+
+<!--<script>-->
+<!--    const urlParams = new URLSearchParams(window.location.search);-->
+<!--    let userName = urlParams.get('name');-->
+<!--    console.log(userName);-->
+<!--</script>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BidHub - Online Bidding Platform</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script>
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted || performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
+                location.reload();
+            }
+        });
+    </script>
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --danger: #e74a3b;
+            --warning: #f6c23e;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+        }
+
+        body {
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fc;
+            color: #4a4a4a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            background: linear-gradient(135deg, var(--primary) 0%, #2a3f9d 100%);
+            padding: 0.8rem 1rem;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 2rem rgba(58, 59, 69, 0.2);
+        }
+
+        .product-image-container {
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8f9fc 0%, #eef1f8 100%);
+            padding: 15px;
+        }
+
+        .product-image {
+            max-height: 100%;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .countdown-timer {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--danger);
+            background: rgba(231, 74, 59, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2a3f9d 0%, var(--primary) 100%);
+            color: white;
+            margin-top: auto;
+            padding: 2rem 0;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+        }
+
+        .social-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .section-title {
+            font-weight: 800;
+            color: #2a3f9d;
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: #2a3f9d;
+            border-color: #2a3f9d;
+        }
+
+        .btn-outline-light:hover {
+            color: var(--primary);
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--primary);
+        }
+
+        .filter-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .product-image-container {
+                height: 180px;
+            }
+
+            .filter-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <i class="fas fa-gavel me-2"></i>BidHub
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!--            <ul class="navbar-nav me-auto">-->
+            <!--                <li class="nav-item">-->
+            <!--                    <a class="nav-link active" href="index.html">Home</a>-->
+            <!--                </li>-->
+            <!--                <li class="nav-item">-->
+            <!--                    <a class="nav-link" href="#">Categories</a>-->
+            <!--                </li>-->
+            <!--                <li class="nav-item">-->
+            <!--                    <a class="nav-link" href="#">Live Auctions</a>-->
+            <!--                </li>-->
+            <!--            </ul>-->
+            <div class="search-box me-3">
+                <input class="form-control me-2" type="search" placeholder="Search products..." id="searchInput">
+                <button class="search-btn" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <!--            <div class="d-flex align-items-center">-->
+            <!--                <a href="signin.html" class="btn btn-outline-light me-2">Sign In</a>-->
+            <!--                <a href="register.html" class="btn btn-light">Register</a>-->
+            <!--            </div>-->
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container my-5">
+    <h2 class="section-title">Featured Auctions</h2>
+
+    <!-- Filters Section -->
+<!--    <div class="filter-card">-->
+<!--        <div class="row g-3">-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="mb-3">-->
+<!--                    <label for="categoryFilter" class="form-label">Category</label>-->
+<!--                    <select class="form-select" id="categoryFilter">-->
+<!--                        <option selected value="all">All Categories</option>-->
+<!--                        <option value="Electronics">Electronics</option>-->
+<!--                        <option value="Art">Art</option>-->
+<!--                        <option value="Collectibles">Collectibles</option>-->
+<!--                        <option value="Jewelry">Jewelry</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="mb-3">-->
+<!--                    <label for="sortFilter" class="form-label">Sort By</label>-->
+<!--                    <select class="form-select" id="sortFilter">-->
+<!--                        <option selected value="default">Default</option>-->
+<!--                        <option value="ending_soonest">Ending Soonest</option>-->
+<!--                        <option value="newest">Newest Listings</option>-->
+<!--                        <option value="price_low">Price: Low to High</option>-->
+<!--                        <option value="price_high">Price: High to Low</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <!-- Product Grid -->
+    <div class="row g-4" id="productGrid">
+        <div class="loader">
+            <div class="spinner-border text-primary spinner" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h5><i class="fas fa-gavel me-2"></i>BidHub</h5>
+                <p class="mt-3">Premier online auction platform for unique items and collectibles. Find rare treasures
+                    and bid to win!</p>
+            </div>
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled mt-3">
+                    <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>How It Works</a></li>
+                    <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>FAQ</a></li>
+                    <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>Contact Us</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right me-2"></i>Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Connect With Us</h5>
+                <div class="mt-3">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4 bg-light">
+        <div class="text-center">
+            <p class="mb-0">&copy; 2025 BidHub. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // WebSocket connection
+    const socket = () => {
+        var socket = new WebSocket("ws://localhost:8080/bcd_one/ws/bids");
+
+        socket.onopen = () => {
+            console.log("WebSocket connected");
+        };
+
+        socket.onmessage = event => {
+            const data = JSON.parse(event.data);
+            console.log("Bid update received:", data);
+            // Update UI with new bid information
+            updateProductBid(data.productId, data.bidModel.amount);
+        };
+
+        socket.onerror = error => {
+            console.error("WebSocket error:", error);
+        };
+    };
+
+    // Update product bid on the page
+    function updateProductBid(productId, amount) {
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            if (card.dataset.id === productId.toString()) {
+                console.log("card id" + card.dataset.id)
+                const bidElement = card.querySelector('.current-bid');
+                if (bidElement) {
+                    bidElement.textContent = `$${amount}`;
+                }
+            }
+        });
+    }
+
+    // Check user authentication
+    const checkUser = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/bcd_one/checkUser");
+            if (response.ok) {
+                let data = await response.json();
+                if (data.success) {
+                    console.log("User authenticated");
+                    socket();
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+        } catch (error) {
+            console.error('Error checking user:', error);
+        }
+    };
+
+    // Load products from backend
+    async function loadProducts() {
+        const productGrid = document.getElementById('productGrid');
+        productGrid.innerHTML = '<div class="loader"><div class="spinner-border text-primary spinner" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+
+        try {
+            const response = await fetch("http://localhost:8080/bcd_one/loadAuctionItems");
+            if (response.ok) {
+                const data = await response.json();
+                const products = data.auctionProducts;
+                console.log(data);
+
+                // Clear loader
+                productGrid.innerHTML = '';
+
+                if (products.length === 0) {
+                    productGrid.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                            <h4 class="mb-3">No Auction Items Available</h4>
+                            <p class="text-muted">Check back later for new auctions</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'col-md-6 col-lg-4 product-card';
+                    productCard.dataset.id = product.id;
+
+                    // Parse end date
+                    const endDate = new Date(
+                        product.endDate.date.year,
+                        product.endDate.date.month - 1, // JS months are 0-based
+                        product.endDate.date.day,
+                        product.endDate.time.hour,
+                        product.endDate.time.minute,
+                        product.endDate.time.second
+                    );
+
+                    // Calculate time remaining
+                    const now = new Date();
+                    const distance = endDate - now;
+
+                    let timeLeft = "Auction Ended";
+                    if (distance > 0) {
+                        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        timeLeft = `${days}d ${hours}h`;
+                    }
+
+                    let priceCurrent ;
+                    if (product.bidCount > 0){
+                        priceCurrent = product.currentHighestBid;
+                    }else{
+                        priceCurrent = product.startingPrice+" (In Starting Price)";
+
+                    }
+
+
+                    productCard.innerHTML = `
+                        <div class="card h-100">
+                            <div class="product-image-container">
+                                <img src="${product.imageUrl}" class="product-image" alt="${product.name}">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${product.name}</h5>
+                                <p class="card-text text-muted">${product.description}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                      <div>
+                                        <span class="text-muted">Current Bid:</span>
+                                        <h5 class="mb-0 current-bid">$${priceCurrent}</h5>
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="text-muted">Time Left:</small>
+                                        <div class="countdown-timer">${timeLeft}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <a href="product.html?id=${product.id}" class="btn btn-primary w-100">
+                                    <i class="fas fa-gavel me-2"></i>Place Bid
+                                </a>
+                            </div>
+                        </div>
+                    `;
+
+                    productGrid.appendChild(productCard);
+                });
+            } else {
+                productGrid.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                        <h4 class="mb-3">Failed to Load Auctions</h4>
+                        <p class="text-muted">Please try again later</p>
+                        <button class="btn btn-primary mt-2" onclick="loadProducts()">
+                            <i class="fas fa-sync me-2"></i>Retry
+                        </button>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading products:', error);
+            productGrid.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                    <h4 class="mb-3">Network Error</h4>
+                    <p class="text-muted">Please check your connection and try again</p>
+                    <button class="btn btn-primary mt-2" onclick="loadProducts()">
+                        <i class="fas fa-sync me-2"></i>Retry
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // Check user authentication
+        checkUser();
+        // Load products
+        loadProducts();
+
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase().trim();
+            const products = document.querySelectorAll('.product-card');
+
+            products.forEach(product => {
+                const title = product.querySelector('.card-title').textContent.toLowerCase();
+                const description = product.querySelector('.card-text').textContent.toLowerCase();
+
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter functionality
+        // document.getElementById('categoryFilter').addEventListener('change', function () {
+        //     // In a real app, you would filter products by category
+        //     // For now, we'll just show all products
+        //     const products = document.querySelectorAll('.product-card');
+        //     products.forEach(product => product.style.display = 'block');
+        // });
+        //
+        // // Sort functionality
+        // document.getElementById('sortFilter').addEventListener('change', function () {
+        //     // In a real app, you would sort products
+        //     // For now, we'll just show all products
+        // });
+    });
+</script>
+</body>
+</html>

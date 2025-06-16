@@ -1,0 +1,8 @@
+<resources>
+    <admin-object-resource
+            enabled="true"
+            jndi-name="jms/BidTopic"
+            res-type="jakarta.jms.Topic"
+            class-name="com.sun.messaging.Topic"
+            description="JMS Topic for broadcasting bids" />
+</resources>

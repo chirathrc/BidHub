@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BidHub - Auction Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --danger: #e74a3b;
+            --warning: #f6c23e;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+        }
+
+        body {
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fc;
+            color: #4a4a4a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            background: linear-gradient(135deg, var(--primary) 0%, #2a3f9d 100%);
+            padding: 0.8rem 1rem;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .product-image-container {
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8f9fc 0%, #eef1f8 100%);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+        }
+
+        .product-image {
+            max-height: 100%;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .product-image:hover {
+            transform: scale(1.03);
+        }
+
+        .bid-info-card {
+            border-radius: 8px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            background: white;
+        }
+
+        .countdown-timer {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--danger);
+            background: rgba(231, 74, 59, 0.1);
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .bid-btn {
+            transition: all 0.2s ease;
+            font-weight: 600;
+            border-radius: 6px;
+        }
+
+        .bid-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .auto-bid-section {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .auto-bid-section.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .auto-bid-section.expanded {
+            max-height: 500px;
+            opacity: 1;
+            margin-bottom: 1rem;
+        }
+
+        .bid-history-card {
+            border-radius: 8px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+        }
+
+        .bid-history-row {
+            transition: background-color 0.3s ease;
+        }
+
+        .bid-history-row:hover {
+            background-color: rgba(78, 115, 223, 0.05);
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2a3f9d 0%, var(--primary) 100%);
+            color: white;
+            margin-top: auto;
+            padding: 2rem 0;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+        }
+
+        .social-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .product-title {
+            font-weight: 800;
+            color: #2a3f9d;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .product-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .seller-badge {
+            background: var(--success);
+            color: white;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: #2a3f9d;
+            border-color: #2a3f9d;
+        }
+
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .alert-warning {
+            background: rgba(246, 194, 62, 0.15);
+            border-color: rgba(246, 194, 62, 0.3);
+        }
+
+        @media (max-width: 992px) {
+            .product-image-container {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-image-container {
+                height: 250px;
+            }
+
+            .bid-btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        .zoom-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+        }
+
+        .zoom-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .zoom-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .bid-increment-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bid-increment-btn::after {
+            content: '+$' attr(data-increment);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .bid-increment-btn:hover::after {
+            opacity: 1;
+        }
+
+        .modal-confirm-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1.5rem;
+        }
+
+        .bid-highlight {
+            background-color: rgba(78, 115, 223, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .bid-highlight-animation {
+            animation: highlightBid 1.5s ease;
+        }
+
+        @keyframes highlightBid {
+            0% {
+                background-color: rgba(78, 115, 223, 0.1);
+            }
+            50% {
+                background-color: rgba(78, 115, 223, 0.3);
+            }
+            100% {
+                background-color: rgba(78, 115, 223, 0.1);
+            }
+        }
+
+        .bid-input-group {
+            position: relative;
+        }
+
+        .bid-validation {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            font-size: 0.85rem;
+            color: var(--danger);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .bid-validation.show {
+            opacity: 1;
+        }
+
+        .auto-bid-badge {
+            background: rgba(28, 200, 138, 0.15);
+            color: var(--success);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .auto-bid-badge i {
+            margin-right: 5px;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid rgba(78, 115, 223, 0.2);
+            border-bottom-color: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styling for bidder info */
+        .bidder-info {
+            background-color: #f8f9fc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Status badges */
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .active-status {
+            background-color: rgba(28, 200, 138, 0.15);
+            color: var(--success);
+        }
+
+        .inactive-status {
+            background-color: rgba(231, 74, 59, 0.15);
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-gavel me-2"></i>BidHub
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!--            <ul class="navbar-nav me-auto">-->
+            <!--                <li class="nav-item">-->
+            <!--                    <a class="nav-link active" href="#">Home</a>-->
+            <!--                </li>-->
+            <!--                <li class="nav-item">-->
+            <!--                    <a class="nav-link" href="#">Categories</a>-->
+            <!--                </li>-->
+            <!--                <li class="nav-item">-->
+            <!--                    <a class="nav-link" href="#">Live Auctions</a>-->
+            <!--                </li>-->
+            <!--            </ul>-->
+            <!--            <form class="d-flex me-3">-->
+            <!--                <input class="form-control me-2" type="search" placeholder="Search products...">-->
+            <!--                <button class="btn btn-outline-light" type="submit">-->
+            <!--                    <i class="fas fa-search"></i>-->
+            <!--                </button>-->
+            <!--            </form>-->
+            <div class="d-flex align-items-center">
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                       id="dropdownUser" data-bs-toggle="dropdown">
+                        <!--                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" alt="Profile"-->
+                        <!--                             class="rounded-circle me-2" width="32" height="32">-->
+                        <span id="usersFinalName">John Doe</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <!--                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>My Profile</a></li>-->
+                        <!--                        <li><a class="dropdown-item" href="#"><i class="fas fa-bullhorn me-2"></i>My Bids</a></li>-->
+                        <!--                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>-->
+                        <!--                        <li>-->
+                        <!--                            <hr class="dropdown-divider">-->
+                        <!--                        </li>-->
+                        <li>
+                            <a class="dropdown-item" onclick="(async function () {
+
+                                const response = await fetch('http://localhost:8080/bcd_one/logOut');
+
+                                if (response.ok){
+                                          window.location.href = 'index.html';
+                                            alert('Signing out...');
+                                }else {
+                                     window.location.href = 'index.html';
+                                }
+
+  })()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container my-5">
+    <div class="text-center mb-5" id="loadingIndicator">
+        <div class="loader"></div>
+        <p class="mt-3">Loading product details...</p>
+    </div>
+
+    <div id="productContent" style="display:none;">
+        <div class="row">
+            <!-- Product Image -->
+            <div class="col-lg-6 mb-4">
+                <div class="position-relative">
+                    <div class="product-image-container">
+                        <img id="productImage"
+                             class="product-image"
+                             alt="Product Image">
+                    </div>
+                    <div class="zoom-controls">
+                        <div class="zoom-btn mb-2" onclick="zoomImage(1.1)">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="zoom-btn" onclick="zoomImage(0.9)">
+                            <i class="fas fa-search-minus"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="col-lg-6">
+                <h1 class="product-title mb-4" id="productTitle"></h1>
+                <div class="d-flex align-items-center mb-4">
+                    <div class="me-3">
+                        <span class="text-muted">Seller:</span>
+                        <strong id="productSeller"></strong>
+                    </div>
+                    <span class="seller-badge" id="sellerBadge">Verified</span>
+                </div>
+
+                <div class="bidder-info mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Current Bidder:</span>
+                        <strong id="currentBidder" style="color: #003366;">No any Bid</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Email:</span>
+                        <strong id="currentBidderEmail" style="color: #006600;">No any Bid</strong>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <p class="fs-5" id="productDescription"></p>
+                </div>
+
+                <!-- Bidding Info -->
+                <div class="card bid-info-card p-4 mb-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Current Bid:</span>
+                                <strong class="fs-5">$<span id="currentBid">0</span></strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Starting Bid:</span>
+                                <strong>$<span id="startingBid">0</span></strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Bids:</span>
+                                <strong><span id="bidCount">0</span></strong>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">Time Left:</span>
+                                <span class="countdown-timer" id="countdownTimer"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Auto bid status badge -->
+                    <div id="autoBidStatus" class="mt-3" style="display: none;">
+                        <span class="auto-bid-badge">
+                            <i class="fas fa-bolt"></i>
+                            Auto bid active: $<span id="activeMaxBid">0</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Bidding Form -->
+                <div class="card p-4 mb-4">
+                    <h5 class="mb-3">Place Your Bid</h5>
+
+                    <div class="d-flex justify-content-between flex-wrap mb-3">
+                        <button class="btn btn-outline-primary bid-btn bid-increment-btn" data-increment="50">+ $50
+                        </button>
+                        <button class="btn btn-outline-primary bid-btn bid-increment-btn" data-increment="100">+ $100
+                        </button>
+                        <button class="btn btn-outline-primary bid-btn bid-increment-btn" data-increment="200">+ $200
+                        </button>
+                        <button class="btn btn-outline-primary bid-btn bid-increment-btn" data-increment="500">+ $500
+                        </button>
+                    </div>
+
+                    <div class="bid-input-group">
+                        <div class="input-group mb-1">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="bidAmount" placeholder="Enter your bid amount"
+                                   min="0" value="0">
+                            <button class="btn btn-primary" type="button" id="placeBidBtn">Place Bid</button>
+                        </div>
+                        <div class="bid-validation" id="bidValidation">
+                            <i class="fas fa-exclamation-circle me-1"></i>
+                            <span id="validationMessage"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="form-check form-switch me-3">
+                            <input class="form-check-input" type="checkbox" id="autoBidToggle"
+                                   style="width: 3em; height: 1.5em;">
+                            <label class="form-check-label" for="autoBidToggle">Enable Auto Bid</label>
+                        </div>
+                        <i class="fas fa-info-circle text-muted" data-bs-toggle="tooltip"
+                           title="Auto bid will automatically increase your bid to stay ahead of competitors up to your maximum amount"></i>
+                    </div>
+
+                    <!-- Expanded Auto Bid Section -->
+                    <div id="autoBidContainer" class="auto-bid-section collapsed">
+                        <div class="mb-3">
+                            <label for="maxBid" class="form-label">Set your maximum bid</label>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="maxBid" placeholder="Enter maximum bid">
+                            </div>
+                            <div class="form-text mb-3">We'll automatically bid for you up to this amount when others
+                                outbid you
+                            </div>
+                            <button class="btn btn-success w-100" id="confirmAutoBidBtn">Confirm Auto Bid</button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        By placing a bid, you agree to our Terms of Service and confirm this is a binding offer.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bidding History -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card bid-history-card">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0"><i class="fas fa-history me-2"></i>Bidding History</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-borderless">
+                                <thead>
+                                <tr class="text-muted">
+                                    <th>Bidder</th>
+                                    <th>Bid Amount</th>
+                                    <th>Time</th>
+                                    <th>Type</th>
+                                </tr>
+                                </thead>
+                                <tbody id="bidHistory">
+                                <!-- Bid history will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="mb-4">Related Products</h3>
+                <div class="row" id="relatedProducts">
+                    <!-- Related products will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Auto Bid Confirmation Modal -->
+<div class="modal fade" id="autoBidConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center px-5">
+                <div class="modal-confirm-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="mb-3">Confirm Auto Bid</h3>
+                <p>You are setting a maximum bid of <strong>$<span id="confirmMaxBid">0</span></strong>. This means
+                    BidHub will automatically place bids for you to maintain your position as the highest bidder, up to
+                    this amount.</p>
+                <p class="mb-4">Are you sure you want to proceed?</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success px-4" id="finalConfirmAutoBid">Confirm
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center">
+                <small class="text-muted">By confirming, you agree to our Terms of Service</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h5><i class="fas fa-gavel me-2"></i>BidHub</h5>
+                <p class="mt-3">Premier online auction platform for unique items and collectibles. Find rare treasures
+                    and bid to win!</p>
+            </div>
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled mt-3">
+                    <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>How It Works</a></li>
+                    <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>FAQ</a></li>
+                    <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>Contact Us</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right me-2"></i>Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Connect With Us</h5>
+                <div class="mt-3">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="mt-4">
+                    <p>Subscribe to our newsletter for updates:</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Your email">
+                        <button class="btn btn-light" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4 bg-light">
+        <div class="text-center">
+            <p class="mb-0">&copy; 2023 BidHub. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let startPrice;
+    let currentBidPrice = 0;
+    let productId;
+    let isHaveAuto = false;
+    let autoMaxPrice = 0;
+    let isToggleProcessing = false; // Guard against rapid toggling
+    let countdownInterval;
+    let userName;
+
+    // WebSocket connection
+    const socket = () => {
+        const socket = new WebSocket("ws://localhost:8080/bcd_one/ws/bids");
+
+        socket.onopen = () => {
+            console.log("WebSocket connected");
+        };
+
+        socket.onerror = error => {
+            console.error("WebSocket error:", error);
+        };
+
+        socket.onmessage = (event) => {
+            const bid = JSON.parse(event.data);
+
+            if (String(bid.productId) === String(productId)) {
+                let bidHistoryUpdateSocket = bid.bidHistory;
+
+                currentBidPrice = bid.bidModel.amount;
+                document.getElementById('currentBid').textContent = currentBidPrice;
+
+                document.getElementById('bidAmount').min = currentBidPrice + 50;
+                document.getElementById('bidAmount').value = currentBidPrice + 50;
+                document.getElementById('bidCount').textContent = bid.bidCount;
+                document.getElementById("currentBidder").textContent = bid.bidModel.bidder.firstName + " " + bid.bidModel.bidder.lastName;
+                document.getElementById("currentBidderEmail").textContent = bid.bidModel.bidder.email;
+
+                // Update bid history
+                const bidHistory = document.getElementById('bidHistory');
+                bidHistory.innerHTML = '';
+
+                for (let i = bidHistoryUpdateSocket.length - 1; i >= 0; i--) {
+                    const bid = bidHistoryUpdateSocket[i];
+                    const fullName = `${bid.bidder.firstName} ${bid.bidder.lastName}`;
+                    const time = new Date(
+                        bid.time.date.year,
+                        bid.time.date.month - 1,
+                        bid.time.date.day,
+                        bid.time.time.hour,
+                        bid.time.time.minute,
+                        bid.time.time.second
+                    ).toLocaleString();
+
+                    const row = document.createElement('tr');
+                    row.className = 'bid-history-row';
+                    row.innerHTML = `
+                        <td>
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random" class="rounded-circle me-2" width="24" height="24">
+                            ${fullName}
+                        </td>
+                        <td class="fw-bold">$${bid.amount.toLocaleString()}</td>
+                        <td>${time}</td>
+                        <td><span class="badge ${bid.type === 'AutoBid' ? 'bg-info' : 'bg-primary'}">${bid.type}</span></td>
+                    `;
+                    bidHistory.appendChild(row);
+                }
+
+                // Check if auto-bid should be disabled (only if active and max reached)
+                if (isHaveAuto && currentBidPrice >= autoMaxPrice) {
+                    console.log("Auto-bid limit reached - turning off auto-bid");
+
+                    // Reset auto-bid state
+                    isHaveAuto = false;
+                    autoMaxPrice = 0;
+
+                    // Only update UI if toggle is currently checked
+                    if (document.getElementById('autoBidToggle').checked) {
+                        document.getElementById('autoBidToggle').checked = false;
+                        document.getElementById('autoBidContainer').classList.remove('expanded');
+                        document.getElementById('autoBidContainer').classList.add('collapsed');
+                    }
+
+                    // Update UI elements
+                    document.getElementById('autoBidStatus').style.display = 'none';
+                    document.getElementById('activeMaxBid').textContent = '';
+
+                    // Re-enable input and button
+                    document.getElementById('maxBid').disabled = false;
+                    document.getElementById('confirmAutoBidBtn').disabled = false;
+
+                    // Remove success alert
+                    const alertBox = document.querySelector('.alert.alert-success');
+                    if (alertBox) alertBox.remove();
+                }
+            }
+        };
+    };
+
+    // Check user authentication
+    const checkUser = async () => {
+        const response = await fetch("http://localhost:8080/bcd_one/checkUser");
+        if (response.ok) {
+            let data = await response.json();
+            if (data.success) {
+                socket();
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+    };
+
+    // Load product data
+    async function loadProduct(productId) {
+        document.getElementById('loadingIndicator').style.display = 'block';
+        document.getElementById('productContent').style.display = 'none';
+
+        const response = await fetch("http://localhost:8080/bcd_one/singleAuction?Id=" + productId);
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data.success) {
+                const productAuction = data.message.product;
+                const bidHistoryMain = data.message.bidHistory;
+                userName = data.message.userModel.firstName + " " + data.message.userModel.lastName;
+
+                // Handle auto-bid data if exists
+                if (data.message.autoBidData != null) {
+                    isHaveAuto = true;
+                    autoMaxPrice = data.message.autoBidData.AutoValue;
+
+                    const autoBidContainer = document.getElementById('autoBidContainer');
+                    autoBidContainer.classList.remove('collapsed');
+                    autoBidContainer.classList.add('expanded');
+                    document.getElementById('maxBid').value = autoMaxPrice;
+                    document.getElementById('autoBidToggle').checked = true;
+
+                    document.getElementById('autoBidStatus').style.display = 'block';
+                    document.getElementById('activeMaxBid').textContent = autoMaxPrice;
+                    document.getElementById('maxBid').disabled = true;
+                    document.getElementById('confirmAutoBidBtn').disabled = true;
+
+                    const successAlert = document.createElement('div');
+                    successAlert.className = 'alert alert-success mt-3';
+                    successAlert.innerHTML = `
+                        <i class="fas fa-check-circle me-2"></i>
+                        Auto bid activated! We'll bid for you up to $${autoMaxPrice}
+                    `;
+                    document.querySelector('.card.p-4.mb-4').appendChild(successAlert);
+                }
+
+                // Calculate time left
+                const endDate = new Date(
+                    productAuction.endDate.date.year,
+                    productAuction.endDate.date.month - 1,
+                    productAuction.endDate.date.day,
+                    productAuction.endDate.time.hour,
+                    productAuction.endDate.time.minute,
+                    0
+                );
+
+                const now = new Date();
+                let diffMs = endDate - now;
+                let timeLeft = "Expired";
+
+                if (diffMs > 0) {
+                    const seconds = Math.floor(diffMs / 1000) % 60;
+                    const minutes = Math.floor(diffMs / (1000 * 60)) % 60;
+                    const hours = Math.floor(diffMs / (1000 * 60 * 60)) % 24;
+                    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                    timeLeft = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }
+
+                // Populate product data
+                document.getElementById('productTitle').textContent = productAuction.name;
+                document.getElementById('productDescription').textContent = productAuction.description;
+                document.getElementById('productSeller').textContent = productAuction.SellerName;
+                document.getElementById('productImage').src = productAuction.imageUrl;
+                document.getElementById('currentBid').textContent = productAuction.currentHighestBid.toLocaleString();
+                document.getElementById('startingBid').textContent = productAuction.startingPrice.toLocaleString();
+                document.getElementById('bidCount').textContent = productAuction.bidCount;
+                document.getElementById('countdownTimer').textContent = timeLeft;
+
+                document.getElementById("usersFinalName").textContent = userName;
+
+                document.getElementById('bidAmount').min = productAuction.currentHighestBid === 0
+                    ? productAuction.startingPrice + 50
+                    : productAuction.currentHighestBid + 50;
+
+                document.getElementById('bidAmount').value = productAuction.currentHighestBid === 0
+                    ? productAuction.startingPrice + 50
+                    : productAuction.currentHighestBid + 50;
+
+                startPrice = productAuction.startingPrice;
+                currentBidPrice = productAuction.currentHighestBid;
+
+                if (bidHistoryMain.length > 0) {
+                    document.getElementById("currentBidder").textContent = productAuction.highestBidder.firstName + " " + productAuction.highestBidder.lastName;
+                    document.getElementById("currentBidderEmail").textContent = productAuction.highestBidder.email;
+                }
+
+                // Populate bid history
+                const bidHistory = document.getElementById('bidHistory');
+                bidHistory.innerHTML = '';
+
+                for (let i = bidHistoryMain.length - 1; i >= 0; i--) {
+                    const bid = bidHistoryMain[i];
+                    const fullName = `${bid.bidder.firstName} ${bid.bidder.lastName}`;
+                    const time = new Date(
+                        bid.time.date.year,
+                        bid.time.date.month - 1,
+                        bid.time.date.day,
+                        bid.time.time.hour,
+                        bid.time.time.minute,
+                        bid.time.time.second
+                    ).toLocaleString();
+
+                    const row = document.createElement('tr');
+                    row.className = 'bid-history-row';
+                    row.innerHTML = `
+                        <td>
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random" class="rounded-circle me-2" width="24" height="24">
+                            ${fullName}
+                        </td>
+                        <td class="fw-bold">$${bid.amount.toLocaleString()}</td>
+                        <td>${time}</td>
+                        <td><span class="badge ${bid.type === 'AutoBid' ? 'bg-info' : 'bg-primary'}">${bid.type}</span></td>
+                    `;
+                    bidHistory.appendChild(row);
+                }
+
+                // Hide loader and show content
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('productContent').style.display = 'block';
+
+                // Start countdown
+                startCountdown();
+            } else {
+                window.location.href = 'home.html';
+            }
+        } else {
+            window.location.href = 'home.html';
+        }
+    }
+
+    // Image zoom functionality
+    function zoomImage(scale) {
+        const img = document.getElementById('productImage');
+        let currentScale = parseFloat(img.style.transform.replace('scale(', '').replace(')', '')) || 1;
+        currentScale *= scale;
+
+        // Limit zoom range
+        if (currentScale < 0.5) currentScale = 0.5;
+        if (currentScale > 3) currentScale = 3;
+
+        img.style.transform = `scale(${currentScale})`;
+        img.style.transformOrigin = 'center center';
+    }
+
+    // Auto bid toggle
+    function setupAutoBidToggle() {
+        document.getElementById('autoBidToggle').addEventListener('change', async function () {
+            if (isToggleProcessing) return;
+            isToggleProcessing = true;
+
+            try {
+                const autoBidContainer = document.getElementById('autoBidContainer');
+
+                if (this.checked) {
+                    autoBidContainer.classList.remove('collapsed');
+                    autoBidContainer.classList.add('expanded');
+                } else {
+                    if (isHaveAuto) {
+                        const response = await fetch("http://localhost:8080/bcd_one/unregisterAuto?productId=" + productId);
+
+                        if (response.ok) {
+                            const dataUnregisterAutoBidding = await response.json();
+
+                            if (dataUnregisterAutoBidding.success) {
+                                isHaveAuto = false;
+                                autoMaxPrice = 0;
+                                alert("Successfully unregistered your auto-bid for this product");
+
+                                document.getElementById('autoBidStatus').style.display = 'none';
+                                document.getElementById('activeMaxBid').textContent = '';
+
+                                document.getElementById('maxBid').disabled = false;
+                                document.getElementById('confirmAutoBidBtn').disabled = false;
+
+                                const alertBox = document.querySelector('.alert.alert-success');
+                                if (alertBox) alertBox.remove();
+                            }
+                        }
+                    }
+
+                    autoBidContainer.classList.remove('expanded');
+                    autoBidContainer.classList.add('collapsed');
+                }
+            } finally {
+                isToggleProcessing = false;
+            }
+        });
+    }
+
+    // Bid button functionality
+    function setupBidButtons() {
+        document.querySelectorAll('.bid-increment-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const increment = parseInt(this.getAttribute('data-increment'));
+                let newBid;
+
+                if (currentBidPrice === 0) {
+                    newBid = startPrice + increment;
+                } else {
+                    newBid = currentBidPrice + increment;
+                }
+
+                document.getElementById('bidAmount').value = newBid;
+                highlightBidInput();
+                hideValidation();
+            });
+        });
+    }
+
+    // Confirm Auto Bid button
+    function setupAutoBidConfirmation() {
+        document.getElementById('confirmAutoBidBtn').addEventListener('click', async function () {
+            const maxBid = document.getElementById('maxBid').value;
+
+            if (!maxBid || isNaN(maxBid)) {
+                alert("Please enter a valid maximum bid amount");
+                return;
+            }
+
+            const currentBid = parseInt(document.getElementById('currentBid').textContent.replace(/,/g, ''));
+            if (parseInt(maxBid) <= (currentBidPrice == 0 ? startPrice : currentBidPrice)) {
+                alert("Your maximum bid must be higher than the current bid");
+                return;
+            }
+
+            document.getElementById('confirmMaxBid').textContent = maxBid;
+            autoBidModal.show();
+        });
+    }
+
+    // Final confirmation for auto bid
+    function setupFinalAutoBidConfirmation() {
+        document.getElementById('finalConfirmAutoBid').addEventListener('click', async function () {
+            document.getElementById('finalConfirmAutoBid').disabled = true;
+            document.querySelector('[data-bs-dismiss="modal"]').disabled = true;
+
+            const maxBid = document.getElementById('maxBid').value;
+
+            const response = await fetch("http://localhost:8080/bcd_one/autoBid?maxPrice=" + maxBid + "&productId=" + productId);
+
+            if (response.ok) {
+                const data = await response.json();
+
+                if (data.success) {
+                    isHaveAuto = true;
+                    autoMaxPrice = maxBid;
+
+                    document.getElementById('autoBidStatus').style.display = 'block';
+                    document.getElementById('activeMaxBid').textContent = maxBid;
+                    document.getElementById('maxBid').disabled = true;
+                    document.getElementById('confirmAutoBidBtn').disabled = true;
+
+                    const successAlert = document.createElement('div');
+                    successAlert.className = 'alert alert-success mt-3';
+                    successAlert.innerHTML = `
+                        <i class="fas fa-check-circle me-2"></i>
+                        Auto bid activated! We'll bid for you up to $${maxBid}
+                    `;
+                    document.querySelector('.card.p-4.mb-4').appendChild(successAlert);
+                } else {
+                    alert("AutoBid option is currently unavailable. Please try again later");
+                }
+            } else {
+                alert("AutoBid option is currently unavailable. Please try again later");
+            }
+
+            document.getElementById('finalConfirmAutoBid').disabled = false;
+            document.querySelector('[data-bs-dismiss="modal"]').disabled = false;
+            autoBidModal.hide();
+        });
+    }
+
+    // Place bid
+    function setupPlaceBidButton() {
+        document.getElementById('placeBidBtn').addEventListener('click', async function () {
+            const bidAmount = parseInt(document.getElementById('bidAmount').value);
+            const currentBid = parseInt(document.getElementById('currentBid').textContent.replace(/,/g, ''));
+
+            if (isHaveAuto) {
+                alert("You can't bid manually while AutoBid is activated");
+                return;
+            }
+
+            if (!bidAmount || isNaN(bidAmount)) {
+                alert("Please enter a valid bid amount");
+                return;
+            }
+
+            if (bidAmount <= currentBidPrice || bidAmount <= startPrice) {
+                alert("Your bid must be higher than the current bid");
+                return;
+            }
+
+            const data = {
+                "productId": productId,
+                "bidAmount": bidAmount
+            };
+
+            const response = await fetch("http://localhost:8080/bcd_one/makeBid", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('currentBid').textContent = bidAmount.toLocaleString();
+                    currentBidPrice = bidAmount;
+
+                    document.getElementById('bidAmount').value = currentBidPrice + 50;
+                    document.getElementById('bidAmount').min = currentBidPrice + 50;
+
+                    // // Add to bidding history
+                    // const bidHistoryTable = document.getElementById('bidHistory');
+                    // const newRow = document.createElement('tr');
+                    // newRow.className = 'bid-history-row bid-highlight';
+                    // newRow.innerHTML = `
+                    //     <td><img src="https://ui-avatars.com/api/?name=John+Doe&background=random" class="rounded-circle me-2" width="24" height="24"> You</td>
+                    //     <td class="fw-bold">$${bidAmount.toLocaleString()}</td>
+                    //     <td>Just now</td>
+                    //     <td><span class="badge bg-primary">Manual</span></td>
+                    // `;
+                    // bidHistoryTable.insertBefore(newRow, bidHistoryTable.firstChild);
+                    //
+                    // // Add animation effect
+                    // setTimeout(() => {
+                    //     newRow.classList.add('bid-highlight-animation');
+                    // }, 10);
+
+                    hideValidation();
+                    showBidSuccessToast(bidAmount);
+                }
+            }
+        });
+    }
+
+    // Countdown functionality
+    function startCountdown() {
+        countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    function updateCountdown() {
+        const timer = document.getElementById('countdownTimer');
+        const parts = timer.textContent.split(' ');
+
+        if (parts[0] === "Expired") return;
+
+        let days = parseInt(parts[0]);
+        let hours = parseInt(parts[1]);
+        let minutes = parseInt(parts[2]);
+        let seconds = parts[3] ? parseInt(parts[3]) : 0;
+
+        // Decrement time
+        seconds--;
+
+        if (seconds < 0) {
+            seconds = 59;
+            minutes--;
+
+            if (minutes < 0) {
+                minutes = 59;
+                hours--;
+
+                if (hours < 0) {
+                    hours = 23;
+                    days--;
+
+                    if (days < 0) {
+                        timer.textContent = "Auction Ended";
+                        document.getElementById('placeBidBtn').disabled = true;
+                        document.querySelectorAll('.bid-btn').forEach(btn => {
+                            btn.disabled = true;
+                        });
+                        clearInterval(countdownInterval);
+                        return;
+                    }
+                }
+            }
+        }
+
+        timer.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    // Helper functions
+    function hideValidation() {
+        document.getElementById('bidValidation').classList.remove('show');
+    }
+
+    function highlightBidInput() {
+        const input = document.getElementById('bidAmount');
+        input.focus();
+        input.classList.add('highlight');
+
+        setTimeout(() => {
+            input.classList.remove('highlight');
+        }, 1000);
+    }
+
+    function showBidSuccessToast(bidAmount) {
+        const toastEl = document.createElement('div');
+        toastEl.className = 'toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-3';
+        toastEl.setAttribute('role', 'alert');
+        toastEl.setAttribute('aria-live', 'assertive');
+        toastEl.setAttribute('aria-atomic', 'true');
+        toastEl.style.zIndex = '1050';
+
+        toastEl.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-check-circle me-2"></i>
+                    Bid placed successfully for $${bidAmount.toLocaleString()}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        `;
+
+        document.body.appendChild(toastEl);
+
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+
+        setTimeout(() => {
+            toastEl.remove();
+        }, 3000);
+    }
+
+    // Initialize the application
+    function initApp() {
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(tooltipTriggerEl => {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Initialize modal
+        autoBidModal = new bootstrap.Modal(document.getElementById('autoBidConfirmModal'), {
+            backdrop: 'static'
+        });
+
+        // Set up event handlers
+        setupAutoBidToggle();
+        setupBidButtons();
+        setupAutoBidConfirmation();
+        setupFinalAutoBidConfirmation();
+        setupPlaceBidButton();
+
+        // Load product data
+        const urlParams = new URLSearchParams(window.location.search);
+        productId = urlParams.get('id');
+        loadProduct(productId);
+
+
+        // Check user authentication
+        checkUser();
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initApp);
+</script>
+</body>
+</html>

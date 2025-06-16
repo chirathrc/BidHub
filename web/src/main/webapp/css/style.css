@@ -1,0 +1,392 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Navigation */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #343a40 !important;
+    padding: 0.8rem 1rem;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #fff !important;
+}
+
+.nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+}
+
+.nav-link.active {
+    color: #fff !important;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item {
+    padding: 0.5rem 1.5rem;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Buttons */
+.btn {
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.btn-outline-light:hover {
+    color: #343a40;
+}
+
+/* Product cards */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.card-text {
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.product-image {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.card-footer {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: none;
+    padding: 1rem;
+}
+
+/* Bidding page */
+#productImage {
+    max-height: 400px;
+    object-fit: contain;
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 1rem;
+}
+
+#productTitle {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+#productDescription {
+    color: #495057;
+    margin-bottom: 1.5rem;
+}
+
+.bid-btn {
+    width: 30%;
+    padding: 0.5rem;
+    font-weight: 600;
+}
+
+.bid-btn:hover {
+    background-color: #e9ecef;
+}
+
+/* Countdown timer */
+#countdownTimer {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* Bidding info card */
+.bid-info-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.bid-info-item {
+    margin-bottom: 0.5rem;
+}
+
+.bid-info-label {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.bid-info-value {
+    font-weight: 600;
+    color: #212529;
+}
+
+/* Form styles */
+.form-control, .form-select {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #6c757d;
+    box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Auto bid toggle */
+.form-switch .form-check-input {
+    width: 2.5em;
+    height: 1.5em;
+    margin-right: 0.5rem;
+}
+
+/* Alerts */
+.alert {
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+}
+
+/* Bidding history table */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-top: none;
+}
+
+.table td {
+    vertical-align: middle;
+    padding: 1rem;
+}
+
+/* Footer */
+footer {
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #343a40;
+    color: #fff;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+footer h5 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+footer a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+footer ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+footer ul li {
+    margin-bottom: 0.5rem;
+}
+
+.social-icons a {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+
+    .product-image {
+        height: 150px;
+    }
+
+    .bid-btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    footer .col-md-4 {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-collapse {
+        padding-top: 1rem;
+    }
+
+    .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    #productImage {
+        max-height: 300px;
+    }
+}
+
+/* Utility classes */
+.text-primary {
+    color: #007bff !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+.rounded {
+    border-radius: 4px !important;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+/* Animation for new bids */
+@keyframes highlightBid {
+    0% {
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.new-bid {
+    animation: highlightBid 2s ease-out;
+}
+
+/* Loading spinner */
+.spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-width: 0.2em;
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+.badge-success {
+    background-color: #28a745;
+}
+
+/* Input group */
+.input-group-text {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+/* Custom scrollbar for tables */
+.table-responsive::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
