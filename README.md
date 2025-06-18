@@ -83,7 +83,7 @@ JMS is used for real-time communication between bidding components and UI update
 BidHub/
 ├── core/           # DTOs, Static data
 ├── ejb/            # EJBs (Session Beans, Bid Manager, AutoBid Manager)
-├── web/            # JSPs, Servlets, WebSocket endpoints
+├── web/            # HTML pages, Servlets, WebSocket endpoints
 ├── ear/            # EAR module with application.xml
 └── README.md
 ```
