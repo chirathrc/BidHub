@@ -10,7 +10,7 @@ This project follows a clean modular architecture divided into:
 
 * `core`: DTOs, utility classes, and shared logic.
 * `ejb`: EJB beans for business logic and state management.
-* `web`: JSPs and servlets for the user interface.
+* `web`: Ui pages and servlets for the user interface.
 * `ear`: EAR packaging to bundle everything into a deployable unit.
 
 ---
