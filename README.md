@@ -4,7 +4,7 @@
 
 ## 🔍 Overview
 
-**BidHub** is a scalable, modular, and database-free **Distributed Online Auction System** developed using **Java EE technologies** such as **EJB**, **JMS**, **JSP**, and **WebSocket (Payara)**. It simulates real-time bidding scenarios with support for **manual and auto-bidding**, designed for academic, enterprise learning, and demonstration purposes.
+**BidHub** is a scalable, modular, and database-free **Distributed Online Auction System** developed using **Java EE technologies** such as **EJB**, **JMS** and **WebSocket (Payara)**. It simulates real-time bidding scenarios with support for **manual and auto-bidding**, designed for academic, enterprise learning, and demonstration purposes.
 
 This project follows a clean modular architecture divided into:
 
